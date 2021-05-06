@@ -10,7 +10,8 @@
     - Tempo de execução
 - Gerar de números para cada tamanho de array
 - 
-- ___________________________________
+
+___________________________________
 Tamanho da lista: 10000
 
 # Algoritmo de Selection Sort #
@@ -44,3 +45,4 @@ Tamanho da lista: 1000000
 Tempo de processamento: 2445067 milisegundos
 
 # Algoritmo de Bubble Sort #
+Tempo de processamento: 5159920 milisegundos
