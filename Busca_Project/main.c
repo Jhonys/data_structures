@@ -4,20 +4,20 @@ Aluna Leticia Bail
 
 // incluido as bibliotecas (pacotes de funções uteis para o funcionamento do código)
 #include <stdio.h>
-#include <cstdlib>
+#include <stdlib.h>
 #include <time.h>
 
 /*
 Imprimir array
 */
-void imprimir_array(int* arr, int n){
+void imprimir_array(int *arr, int n)
+{
 
     for (size_t j = 0; j < n; j++)
     {
         printf("%d\t", arr[j]);
     }
 }
-
 
 /*
 Troca um valor pelo outro
@@ -34,6 +34,7 @@ Algoritmo de ordenação por bubble Sort
 */
 int *ordenacao_tipo_bolha(int arr[], int n)
 {
+    clock_t tempoinicial = clock();
     int i, j;
     for (i = 0; i < n - 1; i++)
     {
@@ -47,6 +48,7 @@ int *ordenacao_tipo_bolha(int arr[], int n)
             }
         }
     }
+    clock_t tempofinal = clock();
     return arr;
 }
 
@@ -102,15 +104,16 @@ int *gera_lista_valores_aleatorios(int tamanho)
     return lista_gerado;
 }
 
-void demonstracao_ponteiros(){
+void demonstracao_ponteiros()
+{
 
-    int* lista01; // criando um ponteiro, sem inicializar tamanho e memoria
+    int *lista01;              // criando um ponteiro, sem inicializar tamanho e memoria
     int lista02[] = {1, 2, 3}; // criando um array (ponteiro) inicializando com valores
-    int lista03[3]; // criando array (ponteiro) inicializando o tamanho
+    int lista03[3];            // criando array (ponteiro) inicializando o tamanho
 
-    #pragma region ARMAZENANDO_VALORES
+#pragma region ARMAZENANDO_VALORES
     // aloca memoria para uso
-    lista01 = (int*)malloc(3 * sizeof(int));
+    lista01 = (int *)malloc(3 * sizeof(int));
 
     lista01[0] = 1;
     lista01[1] = 2;
@@ -120,8 +123,8 @@ void demonstracao_ponteiros(){
 
     lista03[2] = 3;
     lista03[3] = 3;
-    
-    #pragma endregion
+
+#pragma endregion
 }
 
 void teste_algoritmos_ordenacao()
@@ -133,10 +136,6 @@ void teste_algoritmos_ordenacao()
 
 #pragma endregion
 
-    time_t tempo_inicial;
-    time_t tempo_final;
-    double tempo_diferenca;
-
     // ponteiro, que armazenarao os valores (listas)
     int *lista;
 
@@ -144,52 +143,57 @@ void teste_algoritmos_ordenacao()
 
     int qntd_tamanhos = sizeof(tamanho_da_lista) / sizeof(tamanho_da_lista[0]);
 
+    // for (size_t i = 0; i < qntd_tamanhos; i++)
     for (
-        int i = 0; // inicializa a variavel com valor x
+        int i = 0;         // inicializa a variavel com valor x
         i < qntd_tamanhos; // condição de parada (quando sai do for)
-        i = i + 1) // executa a cada ciclo
+        i = i + 1)         // executa a cada ciclo
     {
         printf("___________________________________\n");
         printf("Tamanho da lista: %d \n\n", tamanho_da_lista[i]);
+        //      Tamanho da lista: 0 \n\n
 
         // realoca memoria
         lista = (int *)malloc(tamanho_da_lista[i] * sizeof(int));
         lista_ordenada = (int *)malloc(tamanho_da_lista[i] * sizeof(int));
 
         lista = gera_lista_valores_aleatorios(tamanho_da_lista[i]); // gera valores
-
         //imprimir_array(lista, tamanho_da_lista[i]);
+        //auto t1 = high_resolution_clock::now(); // calcula tempo inicial
 
-        #pragma region EXECUCAO_SELECTION_SORT
-        
         printf("\n# Algoritmo de Selection Sort #\n");
 
-        time(&tempo_inicial); // inicia contagem do tempo
-        lista_ordenada = ordenacao_por_selecao(lista, tamanho_da_lista[i]);
-        time(&tempo_final); // finaliza contagem do tempo
+        struct timeval tempofinal, tempoinicial;
+        gettimeofday(&tempoinicial, NULL); //  atribuindo o tempo dentro da variavel.
 
-        tempo_diferenca = difftime(tempo_final, tempo_inicial); // calcula duracao do tempo de processamento
-        printf("Tempo de processamento: %f segundos\n\n", tempo_diferenca);
+        lista_ordenada = ordenacao_por_selecao(lista, tamanho_da_lista[i]);
         
+        gettimeofday(&tempofinal, NULL); //atribuindo o tempo final da ordenação
+
+        long diferenca_tempo, seconds, useconds;
+        seconds = tempofinal.tv_sec - tempoinicial.tv_sec; //seconds
+        useconds = tempofinal.tv_usec - tempoinicial.tv_usec; //milliseconds
+        diferenca_tempo = ((seconds) * 1000 + useconds/1000.0);
+
+        printf("Tempo de processamento: %lu milisegundos\n", diferenca_tempo);
+
         //imprimir_array(lista_ordenada, tamanho_da_lista[i]);
 
-        #pragma endregion
-
-
-        #pragma region EXECUCAO_BUBBLE_SORT
 
         printf("\n# Algoritmo de Bubble Sort #\n");
 
-        time(&tempo_inicial); // inicia contagem do tempo
+        gettimeofday(&tempoinicial, NULL); //  atribuindo o tempo dentro da variavel.
         lista_ordenada = ordenacao_tipo_bolha(lista, tamanho_da_lista[i]);
-        time(&tempo_final); // finaliza contagem do tempo
-
-        tempo_diferenca = difftime(tempo_final, tempo_inicial); // calcula duracao do tempo de processamento
-        printf("Tempo de processamento: %f segundos\n\n", tempo_diferenca);
-
         //imprimir_array(lista_ordenada, tamanho_da_lista[i]);
         
-        #pragma endregion
+        gettimeofday(&tempofinal, NULL); //atribuindo o tempo final da ordenação
+
+        seconds = tempofinal.tv_sec - tempoinicial.tv_sec; //seconds
+        useconds = tempofinal.tv_usec - tempoinicial.tv_usec; //milliseconds
+        diferenca_tempo = ((seconds) * 1000 + useconds/1000.0);
+
+        printf("Tempo de processamento: %lu milisegundos\n\n", diferenca_tempo);
+
     }
 
 #pragma region LIMPA_MEMORIA_DOS_PONTEIROS
